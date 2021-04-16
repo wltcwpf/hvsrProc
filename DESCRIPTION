@@ -1,0 +1,23 @@
+Package: hvsrProc
+Title: An R package for horizontal-to-vertical spectral ratio processing and calculation
+Version: 0.0.0.9000
+Authors@R: person(given = "Pengfei",
+           family = "Wang",
+           role = c("aut", "cre"),
+           email = "wltcwpf@ucla.edu",
+           comment = c(ORCID = "0000-0002-2844-4557"))
+URL: https://github.com/wltcwpf/hvsrProc
+BugReports: https://github.com/wltcwpf/hvsrProc/issues
+Description: This R package performs horizontal-to-vertical spectral ratio (H/V) processing and calculation. 
+    It was developed by Pengfei Wang under the supervision of Professor Jonathan P. Stewart at the University of California, Los Angeles. 
+    The package can perform HVSR processing for microtremor noise-based data and earthquake strong motions. 
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.0.2
+LinkingTo: 
+    Rcpp,
+    RcppArmadillo
+Imports: 
+    Rcpp,
+    RcppArmadillo
