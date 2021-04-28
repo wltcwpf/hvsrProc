@@ -16,6 +16,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.4724141-0096FF.svg)](https://zenodo.org/badge/latestdoi/358467058)
+[![GitHub license](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/wltcwpf/hvsrProc/blob/master/LICENSE.md)
+[![GitHub release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/wltcwpf/hvsrProc/releases)
+[![Report Issues!](https://img.shields.io/badge/Report%20Issues-Here-1abc9c.svg)](https://github.com/wltcwpf/hvsrProc/issues)
+[![Open Source? Yes!](https://img.shields.io/badge/Open%20Source-Yes-green.svg)](https://github.com/wltcwpf/hvsrProc)
 <!-- badges: end -->
 
 This package is developed for processing and calculating HVSR from noise-based and earthquake-based time series data.
