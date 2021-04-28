@@ -32,6 +32,17 @@ You can install the development version from [GitHub](https://github.com/) with:
 # install.packages("devtools")
 devtools::install_github("wltcwpf/hvsrProc")
 ```
+
+For Mac users, you may also need to download Xcode for command line tools or (by running the following command in Terminal):
+```
+xcode-select --install
+```
+
+For Windows users, you may also need to download and install Rtools from the following link (note remember to add path into the system environment path when installing):
+```
+https://cran.r-project.org/bin/windows/Rtools/
+```
+
 ## Example
 
 To use it, you need to load it first by:
