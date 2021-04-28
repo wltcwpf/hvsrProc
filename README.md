@@ -4,8 +4,9 @@ hvsrProc
 ========
 
 <!-- badges: start -->
-[![DOI](https://zenodo.org/badge/358467058.svg)](https://zenodo.org/badge/latestdoi/358467058) <!-- badges: end -->
+[![DOI](https://zenodo.org/badge/358467058.svg)](https://zenodo.org/badge/latestdoi/358467058)
 
+<!-- badges: end -->
 This package is developed for processing and calculating HVSR from noise-based and earthquake-based time series data.
 
 Installation
