@@ -3,7 +3,7 @@
 hvsrProc
 ========
 
-<a href="https://zenodo.org/badge/latestdoi/358467058"><img src="https://zenodo.org/badge/358467058.svg" alt="DOI"></a>
+[![DOI](https://zenodo.org/badge/358467058.svg)](https://zenodo.org/badge/latestdoi/358467058)
 
 <!-- badges: start -->
 <!-- badges: end -->
