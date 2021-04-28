@@ -1,4 +1,6 @@
 
+[![DOI](https://zenodo.org/badge/358467058.svg)](https://zenodo.org/badge/latestdoi/358467058)
+
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 hvsrProc
 ========
