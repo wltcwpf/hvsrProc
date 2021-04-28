@@ -1,25 +1,27 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-hvsrProc
-========
+
+# hvsrProc
 
 <!-- badges: start -->
-<a href="https://zenodo.org/badge/latestdoi/358467058"><img src="https://zenodo.org/badge/358467058.svg" alt="DOI"></a> <!-- badges: end -->
 
-This package is developed for processing and calculating HVSR from noise-based and earthquake-based time series data.
+[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.4724141-0096FF.svg)](https://zenodo.org/badge/latestdoi/358467058)
+<!-- badges: end -->
 
-Installation
-------------
+This package is developed for processing and calculating HVSR from
+noise-based and earthquake-based time series data.
 
-You can install the development version from [GitHub](https://github.com/) with:
+## Installation
+
+You can install the development version from
+[GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("wltcwpf/hvsrProc")
 ```
 
-Example
--------
+## Example
 
 To use it, you need to load it first by:
 
