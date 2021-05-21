@@ -43,14 +43,7 @@ For Windows users, you may also need to download and install Rtools from the fol
 https://cran.r-project.org/bin/windows/Rtools/
 ```
 
-## Example
+## Usage
 
-To use it, you need to load it first by:
-
-```{r example}
-library(hvsrProc)
-```
-
-The main function is hv_proc():
-
+Please check out [wiki](https://github.com/wltcwpf/hvsrProc/wiki) for more detailed instructions!
 

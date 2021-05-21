@@ -40,12 +40,7 @@ environment path when installing):
 
     https://cran.r-project.org/bin/windows/Rtools/
 
-## Example
+## Usage
 
-To use it, you need to load it first by:
-
-``` r
-library(hvsrProc)
-```
-
-The main function is hv\_proc():
+Please check out [wiki](https://github.com/wltcwpf/hvsrProc/wiki) for
+more detailed instructions!
