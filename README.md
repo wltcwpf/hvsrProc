@@ -40,6 +40,14 @@ environment path when installing):
 
     https://cran.r-project.org/bin/windows/Rtools/
 
+## Citation
+
+If you use hvsrProc (directly or as a dependency of another package) for
+work resulting in an academic publication, we would appreciate if the
+report is cited:
+
+    Wang, P. wltcwpf/hvsrProc: First release (Version v1.0.0). Zenodo. http://doi.org/10.5281/zenodo.4724141
+
 ## Usage
 
 Please check out [wiki](https://github.com/wltcwpf/hvsrProc/wiki) for
