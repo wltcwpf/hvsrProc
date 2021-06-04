@@ -10,28 +10,34 @@
 #' @param ylab A title for the y axis
 #' @param type What type of plot should be drawn. The setting is the same as plot()
 #' @param main An overall title for the plot
+#' @param xlim The limit range of x axis
+#' @param ylim The limit range of y axis
 #' @importFrom graphics axis par
 #' @export
 plot_log10 <- function(x, y, log10_scale = 'x', tick_type = 'lin', minor_tick = TRUE,
-                       xlab = NULL, ylab = NULL, type = NULL, main = NULL) {
+                       xlab = NULL, ylab = NULL, type = NULL, main = NULL, xlim = NULL,
+                       ylim = NULL) {
 
   if (log10_scale == 'x') {
 
-    plot(x, y, type = type, xaxt = 'n', xlab = xlab, ylab = ylab, main = main, log = 'x')
+    plot(x, y, type = type, xaxt = 'n', xlab = xlab, ylab = ylab, main = main, log = 'x',
+         xlim = xlim, ylim = ylim)
 
     log10_ticks(x, y, log10_scale = log10_scale, tick_type = tick_type, minor_tick = minor_tick)
   }
 
   if (log10_scale == 'y') {
 
-    plot(x, y, type = type, yaxt = 'n', xlab = xlab, ylab = ylab, main = main, log = 'y')
+    plot(x, y, type = type, yaxt = 'n', xlab = xlab, ylab = ylab, main = main, log = 'y',
+         xlim = xlim, ylim = ylim)
 
     log10_ticks(x, y, log10_scale = log10_scale, tick_type = tick_type, minor_tick = minor_tick)
   }
 
   if (log10_scale == 'xy') {
 
-    plot(x, y, type = type, yaxt = 'n', xaxt = 'n', xlab = xlab, ylab = ylab, main = main, log = 'xy')
+    plot(x, y, type = type, yaxt = 'n', xaxt = 'n', xlab = xlab, ylab = ylab, main = main,
+         log = 'xy', xlim = xlim, ylim = ylim)
 
     log10_ticks(x, y, log10_scale = log10_scale, tick_type = tick_type, minor_tick = minor_tick)
   }

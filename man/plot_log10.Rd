@@ -13,7 +13,9 @@ plot_log10(
   xlab = NULL,
   ylab = NULL,
   type = NULL,
-  main = NULL
+  main = NULL,
+  xlim = NULL,
+  ylim = NULL
 )
 }
 \arguments{
@@ -34,6 +36,10 @@ plot_log10(
 \item{type}{What type of plot should be drawn. The setting is the same as plot()}
 
 \item{main}{An overall title for the plot}
+
+\item{xlim}{The limit range of x axis}
+
+\item{ylim}{The limit range of y axis}
 }
 \description{
 This function generates a figure in log10 scale
