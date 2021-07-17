@@ -35,7 +35,7 @@ hvsr_win_calc <- function(i_win, h1_wins, h2_wins, v_wins, dt, rotd50_flag = TRU
     freq <- fas_h$freq
 
     # interpolation
-    rotd50_hv_ratio <- approx(freq, hv_ratio, freq_hv_mean)$y
+    rotd50_hv_ratio <- approx(freq, hv_ratio, freq_hv_mean, rule = 2)$y
     res$rotd50_hv_ratio <- rotd50_hv_ratio
   }
 
@@ -55,7 +55,7 @@ hvsr_win_calc <- function(i_win, h1_wins, h2_wins, v_wins, dt, rotd50_flag = TRU
       h_fft <- h1_fft * cos(pi * angle_idx / 180) + h2_fft * sin(pi * angle_idx / 180)
       h_smooth <- ko_smooth(freq = freq, amp = abs(h_fft) * dt)
       hv_ratio <- h_smooth / v_smooth
-      polar_hv_ratio[, i] <- approx(freq, hv_ratio, freq_polar)$y
+      polar_hv_ratio[, i] <- approx(freq, hv_ratio, freq_polar, rule = 2)$y
     }
     res$polar_hv_ratio <- polar_hv_ratio
   }
