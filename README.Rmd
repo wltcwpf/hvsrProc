@@ -55,3 +55,9 @@ Wang, P. wltcwpf/hvsrProc: First release (Version v1.0.0). Zenodo. http://doi.or
 
 Please check out [wiki](https://github.com/wltcwpf/hvsrProc/wiki) for more detailed instructions!
 
+
+## Issues
+
+Please report any running issues or leave your comments on the [Issues](https://github.com/wltcwpf/hvsrProc/issues) page!
+
+

@@ -8,6 +8,7 @@
 #' if max_order = 3, the length of ts becomes at least 4 times.
 #' @return A list is returned with FFT of ts, FAS, the associated frequency of FAS, the associated phase
 #' @keywords FAS
+#' @importFrom stats fft
 #' @export
 fas_cal <- function(ts, dt, max_order = 0){
   npts <- length(ts)
