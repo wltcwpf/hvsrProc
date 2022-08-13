@@ -171,10 +171,10 @@ peak_fit_auto <- function( x_freq, hvsr_mean, hvsr_sd, ratio_thres = 0.7, amp_th
 peak_fit_manual <- function( x_freq, hvsr_mean, fit_range_lb, fit_range_ub ){
 
   # low bound of parameters: c0, c1, mu, sigma
-  lb <- c( 0.1, 0.1, exp(fit_range_lb), 0.01 )
+  lb <- c( 0.1, 0.1, fit_range_lb, 0.01 )
 
   # upper bound of parameters
-  ub <- c( 10, 10, exp(fit_range_ub), 0.5 )
+  ub <- c( 10, 10, fit_range_ub, 0.5 )
 
   par_temp <- c( 0, 1, mean(c(fit_range_lb, fit_range_ub)), 0.1 )
 
