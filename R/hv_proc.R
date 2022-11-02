@@ -58,9 +58,9 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                     hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4, order_zero_padding = 2, dc_flag = TRUE,
                     taper_flag = TRUE, t_front = 5, t_end = 5, ko_smooth_flag = TRUE, ko_smooth_b = 20,
                     parzen_flag = FALSE, parzen_bwidth = 1.5, win_width = 150, overlapping = 0,
-                    sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 5, long_term_len = 30,
+                    sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 10,
                     polar_curves_flag = TRUE, deg_increment = 10, resample_lin2log = TRUE, deci_mean_factor = 10,
-                    deci_polar_factor = 10, output_freq_min = 0.1, output_freq_max = 50,
+                    deci_polar_factor = 10, output_freq_min = 0.01, output_freq_max = 50,
                     output_selected_ts = FALSE, output_removed_ts = FALSE,
                     output_selected_hvsr = TRUE, output_removed_hvsr = FALSE,
                     output_mean_curve = TRUE, output_polar_curves = TRUE,
@@ -226,7 +226,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
           hvsr_sel_out <- hvsr_sel_out[idx_min, ]
         }
         if (!is.na(output_freq_max) & output_freq_max < max(hvsr_sel_out[, 1])) {
-          idx_max <- which(hvsr_sel_out[, 1] <= output_freq_min)
+          idx_max <- which(hvsr_sel_out[, 1] <= output_freq_max)
           hvsr_sel_out <- hvsr_sel_out[idx_max, ]
         }
         write.csv(hvsr_sel_out, paste(output_dir, outputflname_hvsr_sel, sep = '/'), row.names = FALSE)
@@ -241,7 +241,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
           hvsr_mean_out <- hvsr_mean_out[idx_min, ]
         }
         if (!is.na(output_freq_max) & output_freq_max < max(hvsr_mean_out[, 1])) {
-          idx_max <- which(hvsr_mean_out[, 1] <= output_freq_min)
+          idx_max <- which(hvsr_mean_out[, 1] <= output_freq_max)
           hvsr_mean_out <- hvsr_mean_out[idx_max, ]
         }
         write.csv(hvsr_mean_out, paste(output_dir, outputflname_hvsr_mean, sep = '/'), row.names = FALSE)
@@ -263,7 +263,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
             hvsr_unsel_out <- hvsr_unsel_out[idx_min, ]
           }
           if (!is.na(output_freq_max) & output_freq_max < max(hvsr_unsel_out[, 1])) {
-            idx_max <- which(hvsr_unsel_out[, 1] <= output_freq_min)
+            idx_max <- which(hvsr_unsel_out[, 1] <= output_freq_max)
             hvsr_unsel_out <- hvsr_unsel_out[idx_max, ]
           }
           write.csv(hvsr_unsel_out, paste(output_dir, outputflname_hvsr_unsel, sep = '/'), row.names = FALSE)
@@ -306,7 +306,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
           polar_hvsr_mat <- polar_hvsr_mat[idx_min, ]
         }
         if (!is.na(output_freq_max) & output_freq_max < max(polar_hvsr_mat[, 1])) {
-          idx_max <- which(polar_hvsr_mat[, 1] <= output_freq_min)
+          idx_max <- which(polar_hvsr_mat[, 1] <= output_freq_max)
           polar_hvsr_mat <- polar_hvsr_mat[idx_max, ]
         }
         write.csv(polar_hvsr_mat, paste(output_dir, outputflname_hvsr_polar, sep = '/'), row.names = FALSE)

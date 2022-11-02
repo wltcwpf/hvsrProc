@@ -21,7 +21,7 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
                           visual_deci = NA) {
 
   num_wins <- length(h1_wins)
-  cols <- rep(c('pink', 'lightgreen'), num_wins / 2)
+  cols <- rep(c('pink', 'lightgreen'), num_wins)
   len_wins <- unlist(lapply(h1_wins, length))
   tt_len <- sum(len_wins)
   auto_visual_deci <- floor(tt_len / 216000)  # 216000 is the max number of data points will be plotted

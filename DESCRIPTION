@@ -4,7 +4,7 @@ Version: 0.0.1.0000
 Authors@R: person(given = "Pengfei",
            family = "Wang",
            role = c("aut", "cre"),
-           email = "wltcwpf@ucla.edu",
+           email = "p1wang@odu.edu",
            comment = c(ORCID = "0000-0002-2844-4557"))
 URL: https://github.com/wltcwpf/hvsrProc
 BugReports: https://github.com/wltcwpf/hvsrProc/issues
