@@ -34,7 +34,7 @@ hv_proc(
   sta_lta_flag = TRUE,
   sta_lta_moving_term_len = 1,
   short_term_len = 1,
-  long_term_len = 10,
+  long_term_len = 30,
   polar_curves_flag = TRUE,
   deg_increment = 10,
   resample_lin2log = TRUE,
