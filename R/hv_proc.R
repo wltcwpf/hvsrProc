@@ -58,7 +58,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                     hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4, order_zero_padding = 2, dc_flag = TRUE,
                     taper_flag = TRUE, t_front = 5, t_end = 5, ko_smooth_flag = TRUE, ko_smooth_b = 20,
                     parzen_flag = FALSE, parzen_bwidth = 1.5, win_width = 150, overlapping = 0,
-                    sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 10,
+                    sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 30,
                     polar_curves_flag = TRUE, deg_increment = 10, resample_lin2log = TRUE, deci_mean_factor = 10,
                     deci_polar_factor = 10, output_freq_min = 0.01, output_freq_max = 50,
                     output_selected_ts = FALSE, output_removed_ts = FALSE,

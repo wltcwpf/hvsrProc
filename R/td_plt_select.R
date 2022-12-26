@@ -60,9 +60,17 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
 
     # add STA/LTA
     if (sta_lta_flag) {
-      text(mean(t_seq[idx]), 0, round(mean(h1_stalta[[ i_plot ]]), digits = 1))
-      text(mean(t_seq[idx]), -shift_1, round(mean(h2_stalta[[ i_plot ]]), digits = 1))
-      text(mean(t_seq[idx]), -shift_2, round(mean(v_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(h1_wins[[ i_plot ]])[1], round(min(h1_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(h1_wins[[ i_plot ]])[2], round(max(h1_stalta[[ i_plot ]]), digits = 1))
+
+      # text(mean(t_seq[idx]), -shift_1, round(mean(h2_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(h2_wins_sh[[ i_plot ]])[1], round(min(h2_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(h2_wins_sh[[ i_plot ]])[2], round(max(h2_stalta[[ i_plot ]]), digits = 1))
+
+      # text(mean(t_seq[idx]), -shift_2, round(mean(v_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(v_wins_sh[[ i_plot ]])[1], round(min(v_stalta[[ i_plot ]]), digits = 1))
+      text(mean(t_seq[idx]), range(v_wins_sh[[ i_plot ]])[2], round(max(v_stalta[[ i_plot ]]), digits = 1))
+
     }
   }
   legend('top', 'Please select time series for removal.', bg = 'white')

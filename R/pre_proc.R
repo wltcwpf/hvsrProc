@@ -31,10 +31,12 @@ pre_proc <- function(ts, dt, dc_flag = TRUE, taper_flag = TRUE, t_front, t_end, 
     ts <- taper(ts, t_front = t_front, t_end = t_end)
 
   # Filter
-  if (filter_flag)
+  if (filter_flag) {
     res <- bw_pass(ts = ts, dt = dt, fc = fc, nPole = nPole, is_causal = is_causal,
                    order_zero_padding = order_zero_padding)
+    ts <- res$flt_ts
+  }
 
   # return
-  res$flt_ts
+  ts
 }
