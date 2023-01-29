@@ -7,7 +7,7 @@
 pre_proc(
   ts,
   dt,
-  dc_flag = TRUE,
+  detrend = 1,
   taper_flag = TRUE,
   t_front,
   t_end,
@@ -23,7 +23,7 @@ pre_proc(
 
 \item{dt}{The time step}
 
-\item{dc_flag}{The flag indicates if mean removal is applied}
+\item{detrend}{The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal.}
 
 \item{taper_flag}{The flag indicates if Taper is applied}
 

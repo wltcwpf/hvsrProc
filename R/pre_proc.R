@@ -3,7 +3,7 @@
 #' This function pre-process time series (noise). The pre-processing includes mean removal, Taper, and Butterworth filter
 #' @param ts An array of time series
 #' @param dt The time step
-#' @param dc_flag The flag indicates if mean removal is applied
+#' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal.
 #' @param taper_flag The flag indicates if Taper is applied
 #' @param t_front A number, the percentage of taperring for the beginning of the time series
 #' @param t_end A number, the percentage of taperring for the end of the time series
@@ -18,13 +18,22 @@
 #' Chapter 3: Ground Motions and Intensity Measures, in Data Resources for NGA-Subduction Project,
 #' PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).)
 #' @return The filtered time series
+#' @importFrom stats lm
 #' @export
-pre_proc <- function(ts, dt, dc_flag = TRUE, taper_flag = TRUE, t_front, t_end, filter_flag = TRUE,
+pre_proc <- function(ts, dt, detrend = 1, taper_flag = TRUE, t_front, t_end, filter_flag = TRUE,
                      fc, nPole, is_causal, order_zero_padding) {
 
-  # mean removal
-  if (dc_flag)
+  # detrend
+  if (detrend == 0) {
+    ts <- ts
+  } else if (detrend == 1) {
     ts <- mean_removal(ts)
+  } else if (detrend == 2) {
+    ts <- lm(ts ~ seq(1, length(ts)))$residuals
+  } else if (detrend == 6) {
+    x <- seq(1, length(ts))
+    ts <- lm(ts ~ I(x^5) + I(x^4) + I(x^3) + I(x^2) + x)$residuals
+  }
 
   # Taper
   if (taper_flag)

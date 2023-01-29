@@ -21,10 +21,11 @@
 #' @param nPole_lp The pole parameter for low-pass. Default is 4
 #' @param order_zero_padding The order needs to be added for zeroes padding at the end of recordings to
 #' increase the number of data points to a power of 2. Default is 2
-#' @param dc_flag The flag indicates if mean removal is applied to noise. The corrected strong motions do not apply
+#' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.
 #' @param taper_flag The flag indicates if Taper is applied to noise. The corrected strong motions do not apply
 #' @param t_front The percentage of taperring for the beginning of the time series.
 #' @param t_end The percentage of taperring for the end of the time series.
+#' @param horizontal_comb The parameter specifies the combination of two horizontal components. ps_RotD50: rotated combination at the angle where PGA is median; geometric_mean: geometric mean (sqrt(h1(f) * h2(f))); squared_average: squared average (sqrt((h1(f)^2 + h2(f)^2)/2))
 #' @param ko_smooth_flag The flag indicates if KO smoothing is applied.
 #' @param ko_smooth_b The coefficient of bandwidth. Default is 20. A smaller value will lead to more smoothing
 #' @param parzen_flag The flag indicates if Parzen smoothing is applied. Default is FALSE since KO smoothing is applied by default
@@ -55,8 +56,8 @@
 #' @export
 hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, output_pf_flnm = 'Test_',
                     distribution = 'normal', filter_flag = TRUE, is_causal = FALSE,
-                    hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4, order_zero_padding = 2, dc_flag = TRUE,
-                    taper_flag = TRUE, t_front = 5, t_end = 5, ko_smooth_flag = TRUE, ko_smooth_b = 20,
+                    hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4, order_zero_padding = 2, detrend = 1,
+                    taper_flag = TRUE, t_front = 5, t_end = 5, horizontal_comb = 'geometric_mean', ko_smooth_flag = TRUE, ko_smooth_b = 20,
                     parzen_flag = FALSE, parzen_bwidth = 1.5, win_width = 150, overlapping = 0,
                     sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 30,
                     polar_curves_flag = TRUE, deg_increment = 10, resample_lin2log = TRUE, deci_mean_factor = 10,
@@ -67,6 +68,9 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                     output_metadata = TRUE) {
 
   dir.create(output_dir, showWarnings = FALSE)
+
+  if (!(detrend %in% c(0, 1, 2, 6)))
+    stop('Please specify a correct detrend code!')
 
   # pre-process noise data
   if (is_noise) {
@@ -92,25 +96,25 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
 
     # pre-processing
     if (!is.na(hpass_fc) & filter_flag) {
-      h1_wins <- lapply(h1_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                          t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
                          is_causal = is_causal, order_zero_padding = order_zero_padding)
-      h2_wins <- lapply(h2_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                          t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
                          is_causal = is_causal, order_zero_padding = order_zero_padding)
-      v_wins <- lapply(v_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                         t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
     }
 
     if (!is.na(lpass_fc) & filter_flag) {
-      h1_wins <- lapply(h1_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                         t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
-      h2_wins <- lapply(h2_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                         t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
-      v_wins <- lapply(v_wins, pre_proc, dt = dt, dc_flag = dc_flag, taper_flag = taper_flag, t_front = t_front,
+      v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
                         t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
     }
@@ -200,7 +204,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
             freq_hv_mean <- freq[seq(1, length(freq), by = floor(deci_mean_factor))],
             freq_hv_mean <- freq)
     hvsr_list <- lapply(idx_select, hvsr_win_calc, h1_wins = h1_wins, h2_wins = h2_wins,
-                        v_wins = v_wins, dt = dt, rotd50_flag = TRUE, freq_hv_mean = freq_hv_mean,
+                        v_wins = v_wins, dt = dt, horizontal_comb = horizontal_comb, freq_hv_mean = freq_hv_mean,
                         polar_curves_flag = FALSE)
     fd_select <- fd_plt_select(hvsr_list = hvsr_list, freq_hv_mean = freq_hv_mean, freq_min = output_freq_min,
                                freq_max = output_freq_max, hpass_fc = hpass_fc, lpass_fc = lpass_fc,
@@ -216,7 +220,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
         hvsr_sel_out <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(iidx_select) + 1)
         hvsr_sel_out[, 1] <- freq_hv_mean
         for (i in 1:length(iidx_select))
-          hvsr_sel_out[, i + 1] <- hvsr_list[[ iidx_select[i] ]]$rotd50_hv_ratio
+          hvsr_sel_out[, i + 1] <- hvsr_list[[ iidx_select[i] ]]$hv_ratio
         colnames(hvsr_sel_out) <- rep(NA, ncol(hvsr_sel_out))
         colnames(hvsr_sel_out)[1] <- 'Freq_Hz'
         colnames(hvsr_sel_out)[-1] <- paste0(rep('HVSR_', length(iidx_select)), seq(1, length(iidx_select)))
@@ -254,7 +258,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
           hvsr_unsel_out <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(idx_remove) + 1)
           hvsr_unsel_out[, 1] <- freq_hv_mean
           for (i in 1:length(idx_remove))
-            hvsr_unsel_out[, i + 1] <- hvsr_list[[ idx_remove[i] ]]$rotd50_hv_ratio
+            hvsr_unsel_out[, i + 1] <- hvsr_list[[ idx_remove[i] ]]$hv_ratio
           colnames(hvsr_unsel_out) <- rep(NA, ncol(hvsr_unsel_out))
           colnames(hvsr_unsel_out)[1] <- 'Freq_Hz'
           colnames(hvsr_unsel_out)[-1] <- paste0(rep('HVSR_', length(idx_remove)), seq(1, length(idx_remove)))
@@ -278,7 +282,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                 freq_polar <- freq[seq(1, length(freq), by = floor(deci_polar_factor))],
                 freq_polar <- freq)
         hvsr_list <- lapply(idx_select[iidx_select], hvsr_win_calc, h1_wins = h1_wins, h2_wins = h2_wins,
-                            v_wins = v_wins, dt = dt, rotd50_flag = FALSE, polar_curves_flag = TRUE,
+                            v_wins = v_wins, dt = dt, horizontal_comb = horizontal_comb, polar_curves_flag = TRUE,
                             freq_polar = freq_polar, deg_increment = deg_increment)
         polar_degs <- seq(0, 179, by = deg_increment)
         polar_hvsr_mat <- matrix(data = NA, nrow = length(freq_polar), ncol = length(polar_degs) * 3)
@@ -315,9 +319,9 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
       # output Metadata
       if (output_metadata) {
         outputflname_meta <- paste0(output_pf_flnm, 'metadata.csv')
-        Meta_names <- c('sample freq (Hz)', 'record duration (min)', 'mean removal',
-                        'time window (sec)', 'window overlap (sec)', 'taper type',
-                        'taper width (percentage)', 'number of windows (total)',
+        Meta_names <- c('sample freq (Hz)', 'record duration (min)', 'detrend',
+                        'time window (sec)', 'window overlap (sec)', 'taper type', 'front taper width (percentage)',
+                        'end taper width (percentage)', 'horizontal combination', 'number of windows (total)',
                         'number of windows (selected)', 'high pass filter',
                         'high pass filter corner frequency (Hz)', 'high pass filter type',
                         'smoothing type', 'smoothing constant', 'data type', 'distribution')
@@ -325,20 +329,21 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
         colnames(Meta_output) <- Meta_names
         Meta_output[1] <- 1/dt   # Hz
         Meta_output[2] <- length(h1) * dt /60   # total duration
-        Meta_output[3] <- ifelse(dc_flag, 0, 1)  # mean removel: TRUE-0, FALSE-1
-        Meta_output[4] <- win_width
+        Meta_output[3] <- ifelse(detrend == 0, 'no detrend', ifelse(detrend == 1, 'mean removal', ifelse(detrend == 2, 'linear detrend', 'fifth order polynomial detrend')))  # detrend
         Meta_output[5] <- overlapping
         Meta_output[6] <- 'Tukey'
-        Meta_output[7] <- mean(c(t_front, t_end))
-        Meta_output[8] <- num_wins
-        Meta_output[9] <- length(iidx_select)
-        Meta_output[10] <- ifelse(filter_flag & !is.na(hpass_fc), 0, 1)
-        Meta_output[11] <- hpass_fc
-        Meta_output[12] <- 'Butterworth'
-        Meta_output[13] <- 'KonnoOhmachi'
-        Meta_output[14] <- ko_smooth_b
-        Meta_output[15] <- ifelse(is_noise, 0, 1) # 0: noise; 1: earthquake strong motions
-        Meta_output[16] <- distribution
+        Meta_output[7] <- t_front
+        Meta_output[8] <- t_end
+        Meta_output[9] <- horizontal_comb
+        Meta_output[10] <- num_wins
+        Meta_output[11] <- length(iidx_select)
+        Meta_output[12] <- ifelse(filter_flag & !is.na(hpass_fc), 0, 1)
+        Meta_output[13] <- hpass_fc
+        Meta_output[14] <- 'Butterworth'
+        Meta_output[15] <- 'KonnoOhmachi'
+        Meta_output[16] <- ko_smooth_b
+        Meta_output[17] <- ifelse(is_noise, 0, 1) # 0: noise; 1: earthquake strong motions
+        Meta_output[18] <- distribution
         write.csv(Meta_output, paste(output_dir, outputflname_meta, sep = '/'), row.names = FALSE)
       }
     }

@@ -21,10 +21,11 @@ hv_proc(
   nPole_hp = 5,
   nPole_lp = 4,
   order_zero_padding = 2,
-  dc_flag = TRUE,
+  detrend = 1,
   taper_flag = TRUE,
   t_front = 5,
   t_end = 5,
+  horizontal_comb = "geometric_mean",
   ko_smooth_flag = TRUE,
   ko_smooth_b = 20,
   parzen_flag = FALSE,
@@ -88,13 +89,15 @@ We recommend normal for noise data and log_normal for corrected strong motions}
 \item{order_zero_padding}{The order needs to be added for zeroes padding at the end of recordings to
 increase the number of data points to a power of 2. Default is 2}
 
-\item{dc_flag}{The flag indicates if mean removal is applied to noise. The corrected strong motions do not apply}
+\item{detrend}{The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.}
 
 \item{taper_flag}{The flag indicates if Taper is applied to noise. The corrected strong motions do not apply}
 
 \item{t_front}{The percentage of taperring for the beginning of the time series.}
 
 \item{t_end}{The percentage of taperring for the end of the time series.}
+
+\item{horizontal_comb}{The parameter specifies the combination of two horizontal components. ps_RotD50: rotated combination at the angle where PGA is median; geometric_mean: geometric mean (sqrt(h1(f) * h2(f))); squared_average: squared average (sqrt((h1(f)^2 + h2(f)^2)/2))}
 
 \item{ko_smooth_flag}{The flag indicates if KO smoothing is applied.}
 

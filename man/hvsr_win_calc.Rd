@@ -10,7 +10,7 @@ hvsr_win_calc(
   h2_wins,
   v_wins,
   dt,
-  rotd50_flag = TRUE,
+  horizontal_comb = "geometric_mean",
   freq_hv_mean,
   polar_curves_flag = TRUE,
   freq_polar,
@@ -28,9 +28,9 @@ hvsr_win_calc(
 
 \item{dt}{The time step}
 
-\item{rotd50_flag}{The flag indicates if RotD50 HVSR is calculated}
+\item{horizontal_comb}{The parameter specifies the combination of two horizontal components. ps_RotD50: rotated combination at the angle where PGA is median; geometric_mean: geometric mean (sqrt(h1(f) * h2(f))); squared_average: squared average (sqrt((h1(f)^2 + h2(f)^2)/2))}
 
-\item{freq_hv_mean}{The target frequencys of RotD50 HVSR}
+\item{freq_hv_mean}{The target frequencys of HVSR}
 
 \item{polar_curves_flag}{The flag indicates if polar curves are calculated}
 
@@ -42,5 +42,5 @@ hvsr_win_calc(
 The HVSR for the given window
 }
 \description{
-This function calculates RotD50 HVSR and polar HVSR for the given window
+This function calculates HVSR and polar HVSR for the given window
 }

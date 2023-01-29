@@ -19,7 +19,7 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max, hpass_fc,
   x_range <- c(visual_freq_min, min(c(freq_max, max(freq_hv_mean))))
   hvsr_mat <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(hvsr_list))
   for (i in 1:length(hvsr_list)) {
-    hvsr_mat[, i] <- hvsr_list[[ i ]]$rotd50_hv_ratio
+    hvsr_mat[, i] <- hvsr_list[[ i ]]$hv_ratio
   }
   y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, ])
   plot(x_range, c(y_range[1], y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
