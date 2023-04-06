@@ -55,10 +55,10 @@ hvsr_win_calc <- function(i_win, h1_wins, h2_wins, v_wins, dt, horizontal_comb =
 
   # interpolation
   hv_ratio <- approx(freq, hv_ratio, freq_hv_mean, rule = 2)$y
-  res$h1_smooth <- h1_smooth
-  res$h2_smooth <- h2_smooth
-  res$v_smooth <- v_smooth
   res$hv_ratio <- hv_ratio
+  res$h1_smooth <- approx(freq, h1_smooth, freq_hv_mean, rule = 2)$y
+  res$h2_smooth <- approx(freq, h2_smooth, freq_hv_mean, rule = 2)$y
+  res$v_smooth <- approx(freq, v_smooth, freq_hv_mean, rule = 2)$y
 
 
   # polar curve:
