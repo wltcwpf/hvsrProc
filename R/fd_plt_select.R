@@ -14,7 +14,7 @@
 #' @param distribution The distribution assumption on the HVSR amplitudes. It can take "normal" or "log_normal".
 #' @return The lefted indices of windows after frequency-domain rejection
 #' @importFrom graphics plot abline lines legend locator text
-#' @importFrom grDevices dev.off
+#' @importFrom grDevices dev.off adjustcolor
 #' @importFrom stats sd
 #' @export
 fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
@@ -40,14 +40,14 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
                          v_mat[freq_hv_mean >= visual_freq_min, ]))
   par(mfrow = c(1, 2))
   plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
-       ylab = 'FAS', log = 'x', xaxt = 'n')
-  log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
+       ylab = 'FAS', log = 'xy', xaxt = 'n')
+  log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'xy', tick_type = 'lin')
   abline(v = x_range[2], lwd = 2)
   if (pre_filter_flag) {
-    if (!is.na(prehpass_fc))
-      abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
-    if (!is.na(lpass_fc))
-      abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(pre_filter_hpass_fc))
+      abline(v = pre_filter_hpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(pre_filter_lpass_fc))
+      abline(v = pre_filter_lpass_fc, lwd = 2, col = 'purple', lty = 2)
   }
   if (filter_flag) {
     if (!is.na(hpass_fc))
@@ -56,10 +56,15 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
       abline(v = lpass_fc, lwd = 2, col = 'purple')
   }
   for(i_plot in 1:ncol(hvsr_mat)){
-    lines(freq_hv_mean, h1_mat[,i_plot], col = 'red')
-    lines(freq_hv_mean, h2_mat[,i_plot], col = 'orange')
-    lines(freq_hv_mean, v_mat[,i_plot], col = 'blue')
+    lines(freq_hv_mean, h1_mat[,i_plot], col = adjustcolor('red', alpha.f = 0.2), lwd = 0.5)
+    lines(freq_hv_mean, h2_mat[,i_plot], col = adjustcolor('orange', alpha.f = 0.2), lwd = 0.5)
+    lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
   }
+  lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
+  lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'orange', lwd = 2)
+  lines(freq_hv_mean, apply(v_mat, 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+  legend('topright', legend = c('H1', 'H2', 'V'), col = c('red', 'orange', 'blue'), lty = 1,
+         lwd = 2)
 
 
   plot(x_range, c(y_range[1], y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
@@ -67,10 +72,10 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
   log10_ticks(x = x_range, y = c(y_range[1], y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
   abline(v = x_range[2], lwd = 2)
   if (pre_filter_flag) {
-    if (!is.na(prehpass_fc))
-      abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
-    if (!is.na(lpass_fc))
-      abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(pre_filter_hpass_fc))
+      abline(v = pre_filter_hpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(pre_filter_lpass_fc))
+      abline(v = pre_filter_lpass_fc, lwd = 2, col = 'purple', lty = 2)
   }
   if (filter_flag) {
     if (!is.na(hpass_fc))
@@ -116,14 +121,14 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
 
     par(mfrow = c(1, 2))
     plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
-         ylab = 'FAS', log = 'x', xaxt = 'n')
-    log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
+         ylab = 'FAS', log = 'xy', xaxt = 'n')
+    log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'xy', tick_type = 'lin')
     abline(v = x_range[2], lwd = 2)
     if (pre_filter_flag) {
-      if (!is.na(prehpass_fc))
-        abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
-      if (!is.na(lpass_fc))
-        abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(pre_filter_hpass_fc))
+        abline(v = pre_filter_hpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(pre_filter_lpass_fc))
+        abline(v = pre_filter_lpass_fc, lwd = 2, col = 'purple', lty = 2)
     }
     if (filter_flag) {
       if (!is.na(hpass_fc))
@@ -132,20 +137,25 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
         abline(v = lpass_fc, lwd = 2, col = 'purple')
     }
     for(i_plot in 1:ncol(hvsr_mat)){
-      lines(freq_hv_mean, h1_mat[,i_plot], col = 'red')
-      lines(freq_hv_mean, h2_mat[,i_plot], col = 'orange')
-      lines(freq_hv_mean, v_mat[,i_plot], col = 'blue')
+      lines(freq_hv_mean, h1_mat[,i_plot], col = adjustcolor('red', alpha.f = 0.2), lwd = 0.5)
+      lines(freq_hv_mean, h2_mat[,i_plot], col = adjustcolor('orange', alpha.f = 0.2), lwd = 0.5)
+      lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
     }
+    lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
+    lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'orange', lwd = 2)
+    lines(freq_hv_mean, apply(v_mat, 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+    legend('topright', legend = c('H1', 'H2', 'V'), col = c('red', 'orange', 'blue'), lty = 1,
+           lwd = 2)
 
     plot(x_range, c(y_range[1], y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
          ylab = 'HVSR', log = 'x', xaxt = 'n')
     log10_ticks(x = x_range, y = c(y_range[1], y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
     abline(v = x_range[2], lwd = 2)
     if (pre_filter_flag) {
-      if (!is.na(prehpass_fc))
-        abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
-      if (!is.na(lpass_fc))
-        abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(pre_filter_hpass_fc))
+        abline(v = pre_filter_hpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(pre_filter_lpass_fc))
+        abline(v = pre_filter_lpass_fc, lwd = 2, col = 'purple', lty = 2)
     }
     if (filter_flag) {
       if (!is.na(hpass_fc))

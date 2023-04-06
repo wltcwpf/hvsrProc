@@ -48,8 +48,10 @@ hvsr_win_calc <- function(i_win, h1_wins, h2_wins, v_wins, dt, horizontal_comb =
   v_smooth <- ko_smooth(freq = fas_v$freq, amp = fas_v$amp)
   hv_ratio <- h_smooth / v_smooth
 
-  fas_h1 <- fas_cal(ts = h1_sub, dt = dt)
-  fas_h2 <- fas_cal(ts = h2_sub, dt = dt)
+  if (horizontal_comb == 'ps_RotD50') {
+    fas_h1 <- fas_cal(ts = h1_sub, dt = dt)
+    fas_h2 <- fas_cal(ts = h2_sub, dt = dt)
+  }
   h1_smooth <- ko_smooth(freq = freq, amp = fas_h1$amp)
   h2_smooth <- ko_smooth(freq = freq, amp = fas_h2$amp)
 
