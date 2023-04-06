@@ -1,6 +1,6 @@
 Package: hvsrProc
 Title: An R package for horizontal-to-vertical spectral ratio processing and calculation
-Version: 2.0.0000
+Version: 2.1.0000
 Authors@R: person(given = "Pengfei",
            family = "Wang",
            role = c("aut", "cre"),
@@ -14,7 +14,7 @@ Description: This R package performs horizontal-to-vertical spectral ratio (H/V)
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.1
 LinkingTo: 
     Rcpp,
     RcppArmadillo

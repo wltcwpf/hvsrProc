@@ -5,6 +5,10 @@
 #' @param freq_hv_mean The frequency
 #' @param freq_min The minimum frequency of interest
 #' @param freq_max The maximum frequency of interest
+#' @param pre_filter_flag The flag indicate if pre-filter is applied
+#' @param pre_filter_hpass_fc High-pass corner frequency applied in pre-filter
+#' @param pre_filter_lpass_fc Low-pass corner frequency applied in pre-filter
+#' @param filter_flag The flag indicate if filter is applied
 #' @param hpass_fc High-pass corner frequency applied in filter
 #' @param lpass_fc Low-pass corner frequency applied in filter
 #' @param distribution The distribution assumption on the HVSR amplitudes. It can take "normal" or "log_normal".
@@ -13,23 +17,67 @@
 #' @importFrom grDevices dev.off
 #' @importFrom stats sd
 #' @export
-fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max, hpass_fc, lpass_fc, distribution) {
+fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
+                          pre_filter_flag, pre_filter_hpass_fc, pre_filter_lpass_fc,
+                          filter_flag, hpass_fc, lpass_fc, distribution) {
 
   visual_freq_min <- max(c(freq_min, min(freq_hv_mean))) / 2
   x_range <- c(visual_freq_min, min(c(freq_max, max(freq_hv_mean))))
   hvsr_mat <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(hvsr_list))
+  h1_mat <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(hvsr_list))
+  h2_mat <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(hvsr_list))
+  v_mat <- matrix(data = NA, nrow = length(freq_hv_mean), ncol = length(hvsr_list))
   for (i in 1:length(hvsr_list)) {
     hvsr_mat[, i] <- hvsr_list[[ i ]]$hv_ratio
+    h1_mat[, i] <- hvsr_list[[ i ]]$h1_smooth
+    h2_mat[, i] <- hvsr_list[[ i ]]$h2_smooth
+    v_mat[, i] <- hvsr_list[[ i ]]$v_smooth
   }
   y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, ])
+
+  ind_y_range <- range(c(h1_mat[freq_hv_mean >= visual_freq_min, ],
+                         h2_mat[freq_hv_mean >= visual_freq_min, ],
+                         v_mat[freq_hv_mean >= visual_freq_min, ]))
+  par(mfrow = c(1, 2))
+  plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
+       ylab = 'FAS', log = 'x', xaxt = 'n')
+  log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
+  abline(v = x_range[2], lwd = 2)
+  if (pre_filter_flag) {
+    if (!is.na(prehpass_fc))
+      abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(lpass_fc))
+      abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+  }
+  if (filter_flag) {
+    if (!is.na(hpass_fc))
+      abline(v = hpass_fc, lwd = 2, col = 'purple')
+    if (!is.na(lpass_fc))
+      abline(v = lpass_fc, lwd = 2, col = 'purple')
+  }
+  for(i_plot in 1:ncol(hvsr_mat)){
+    lines(freq_hv_mean, h1_mat[,i_plot], col = 'red')
+    lines(freq_hv_mean, h2_mat[,i_plot], col = 'orange')
+    lines(freq_hv_mean, v_mat[,i_plot], col = 'blue')
+  }
+
+
   plot(x_range, c(y_range[1], y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
        ylab = 'HVSR', log = 'x', xaxt = 'n')
   log10_ticks(x = x_range, y = c(y_range[1], y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
   abline(v = x_range[2], lwd = 2)
-  if (!is.na(hpass_fc))
-    abline(v = hpass_fc, lwd = 2, col = 'purple')
-  if (!is.na(lpass_fc))
-    abline(v = lpass_fc, lwd = 2, col = 'purple')
+  if (pre_filter_flag) {
+    if (!is.na(prehpass_fc))
+      abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
+    if (!is.na(lpass_fc))
+      abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+  }
+  if (filter_flag) {
+    if (!is.na(hpass_fc))
+      abline(v = hpass_fc, lwd = 2, col = 'purple')
+    if (!is.na(lpass_fc))
+      abline(v = lpass_fc, lwd = 2, col = 'purple')
+  }
   for(i_plot in 1:ncol(hvsr_mat)){
     lines(freq_hv_mean, hvsr_mat[,i_plot])
   }
@@ -65,14 +113,46 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max, hpass_fc,
       p <- locator(1)
     }
     y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, idx_select])
+
+    par(mfrow = c(1, 2))
+    plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
+         ylab = 'FAS', log = 'x', xaxt = 'n')
+    log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
+    abline(v = x_range[2], lwd = 2)
+    if (pre_filter_flag) {
+      if (!is.na(prehpass_fc))
+        abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(lpass_fc))
+        abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+    }
+    if (filter_flag) {
+      if (!is.na(hpass_fc))
+        abline(v = hpass_fc, lwd = 2, col = 'purple')
+      if (!is.na(lpass_fc))
+        abline(v = lpass_fc, lwd = 2, col = 'purple')
+    }
+    for(i_plot in 1:ncol(hvsr_mat)){
+      lines(freq_hv_mean, h1_mat[,i_plot], col = 'red')
+      lines(freq_hv_mean, h2_mat[,i_plot], col = 'orange')
+      lines(freq_hv_mean, v_mat[,i_plot], col = 'blue')
+    }
+
     plot(x_range, c(y_range[1], y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
          ylab = 'HVSR', log = 'x', xaxt = 'n')
     log10_ticks(x = x_range, y = c(y_range[1], y_range[2]*1.5), log10_scale = 'x', tick_type = 'lin')
     abline(v = x_range[2], lwd = 2)
-    if (!is.na(hpass_fc))
-      abline(v = hpass_fc, lwd = 2, col = 'purple')
-    if (!is.na(lpass_fc))
-      abline(v = lpass_fc, lwd = 2, col = 'purple')
+    if (pre_filter_flag) {
+      if (!is.na(prehpass_fc))
+        abline(v = hpass_fc, lwd = 2, col = 'purple', lty = 2)
+      if (!is.na(lpass_fc))
+        abline(v = lpass_fc, lwd = 2, col = 'purple', lty = 2)
+    }
+    if (filter_flag) {
+      if (!is.na(hpass_fc))
+        abline(v = hpass_fc, lwd = 2, col = 'purple')
+      if (!is.na(lpass_fc))
+        abline(v = lpass_fc, lwd = 2, col = 'purple')
+    }
     for(i_plot in idx_select){
       lines(freq_hv_mean, hvsr_mat[,i_plot])
     }

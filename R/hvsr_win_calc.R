@@ -48,9 +48,16 @@ hvsr_win_calc <- function(i_win, h1_wins, h2_wins, v_wins, dt, horizontal_comb =
   v_smooth <- ko_smooth(freq = fas_v$freq, amp = fas_v$amp)
   hv_ratio <- h_smooth / v_smooth
 
+  fas_h1 <- fas_cal(ts = h1_sub, dt = dt)
+  fas_h2 <- fas_cal(ts = h2_sub, dt = dt)
+  h1_smooth <- ko_smooth(freq = freq, amp = fas_h1)
+  h2_smooth <- ko_smooth(freq = freq, amp = fas_h2)
 
   # interpolation
   hv_ratio <- approx(freq, hv_ratio, freq_hv_mean, rule = 2)$y
+  res$h1_smooth <- h1_smooth
+  res$h2_smooth <- h2_smooth
+  res$v_smooth <- v_smooth
   res$hv_ratio <- hv_ratio
 
 

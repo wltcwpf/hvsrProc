@@ -9,6 +9,10 @@ fd_plt_select(
   freq_hv_mean,
   freq_min,
   freq_max,
+  pre_filter_flag,
+  pre_filter_hpass_fc,
+  pre_filter_lpass_fc,
+  filter_flag,
   hpass_fc,
   lpass_fc,
   distribution
@@ -22,6 +26,14 @@ fd_plt_select(
 \item{freq_min}{The minimum frequency of interest}
 
 \item{freq_max}{The maximum frequency of interest}
+
+\item{pre_filter_flag}{The flag indicate if pre-filter is applied}
+
+\item{pre_filter_hpass_fc}{High-pass corner frequency applied in pre-filter}
+
+\item{pre_filter_lpass_fc}{Low-pass corner frequency applied in pre-filter}
+
+\item{filter_flag}{The flag indicate if filter is applied}
 
 \item{hpass_fc}{High-pass corner frequency applied in filter}
 

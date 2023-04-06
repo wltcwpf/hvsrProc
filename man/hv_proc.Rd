@@ -14,6 +14,13 @@ hv_proc(
   output_dir,
   output_pf_flnm = "Test_",
   distribution = "normal",
+  pre_filter_flag = FALSE,
+  pre_filter_is_causal = FALSE,
+  pre_filter_hpass_fc = 0.1,
+  pre_filter_lpass_fc = NA,
+  pre_filter_nPole_hp = 5,
+  pre_filter_nPole_lp = 4,
+  pre_filter_order_zero_padding = 2,
   filter_flag = TRUE,
   is_causal = FALSE,
   hpass_fc = 0.1,
@@ -32,7 +39,7 @@ hv_proc(
   parzen_bwidth = 1.5,
   win_width = 150,
   overlapping = 0,
-  sta_lta_flag = TRUE,
+  sta_lta_flag = FALSE,
   sta_lta_moving_term_len = 1,
   short_term_len = 1,
   long_term_len = 30,
@@ -73,6 +80,21 @@ h2, v, and, dt are needed; when is_noise = FALSE, eqk_filepath is needed.}
 
 \item{distribution}{The distribution assumption on the HVSR amplitudes. It can take "normal" or "log_normal".
 We recommend normal for noise data and log_normal for corrected strong motions}
+
+\item{pre_filter_flag}{The flag indicates if a pre-filter for the entire time series is applied (before windowing).}
+
+\item{pre_filter_is_causal}{A binary to indicator if causal is applied in pre-filter}
+
+\item{pre_filter_hpass_fc}{The corner frequency for high-pass in per-filter}
+
+\item{pre_filter_lpass_fc}{The corner frequency for low-pass in per-filter}
+
+\item{pre_filter_nPole_hp}{The pole parameter for high-pass in per-filter. Default is 5}
+
+\item{pre_filter_nPole_lp}{The pole parameter for low-pass in per-filter. Default is 4}
+
+\item{pre_filter_order_zero_padding}{The order needs in per-filter to be added for zeroes padding at the end of recordings to
+increase the number of data points to a power of 2. Default is 2.}
 
 \item{filter_flag}{The flag indicates if filter is applied to noise. The corrected strong motions do not apply}
 

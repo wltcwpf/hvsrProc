@@ -13,6 +13,14 @@
 #' @param output_pf_flnm The prefix name of output file names
 #' @param distribution The distribution assumption on the HVSR amplitudes. It can take "normal" or "log_normal".
 #' We recommend normal for noise data and log_normal for corrected strong motions
+#' @param pre_filter_flag The flag indicates if a pre-filter for the entire time series is applied (before windowing).
+#' @param pre_filter_is_causal A binary to indicator if causal is applied in pre-filter
+#' @param pre_filter_hpass_fc The corner frequency for high-pass in per-filter
+#' @param pre_filter_lpass_fc The corner frequency for low-pass in per-filter
+#' @param pre_filter_nPole_hp The pole parameter for high-pass in per-filter. Default is 5
+#' @param pre_filter_nPole_lp The pole parameter for low-pass in per-filter. Default is 4
+#' @param pre_filter_order_zero_padding The order needs in per-filter to be added for zeroes padding at the end of recordings to
+#' increase the number of data points to a power of 2. Default is 2.
 #' @param filter_flag The flag indicates if filter is applied to noise. The corrected strong motions do not apply
 #' @param is_causal A binary to indicator if causal is applied to noise. Apply causal if is_causal = TRUE and apply acausal if is_causal = FALSE
 #' @param hpass_fc The corner frequency for high-pass filter
@@ -55,11 +63,14 @@
 #' @importFrom utils read.csv write.csv
 #' @export
 hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, output_pf_flnm = 'Test_',
-                    distribution = 'normal', filter_flag = TRUE, is_causal = FALSE,
-                    hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4, order_zero_padding = 2, detrend = 1,
+                    distribution = 'normal', pre_filter_flag = FALSE, pre_filter_is_causal = FALSE,
+                    pre_filter_hpass_fc = 0.1, pre_filter_lpass_fc = NA, pre_filter_nPole_hp = 5,
+                    pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 2,
+                    filter_flag = TRUE, is_causal = FALSE, hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4,
+                    order_zero_padding = 2, detrend = 1,
                     taper_flag = TRUE, t_front = 5, t_end = 5, horizontal_comb = 'geometric_mean', ko_smooth_flag = TRUE, ko_smooth_b = 20,
                     parzen_flag = FALSE, parzen_bwidth = 1.5, win_width = 150, overlapping = 0,
-                    sta_lta_flag = TRUE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 30,
+                    sta_lta_flag = FALSE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 30,
                     polar_curves_flag = TRUE, deg_increment = 10, resample_lin2log = TRUE, deci_mean_factor = 10,
                     deci_polar_factor = 10, output_freq_min = 0.01, output_freq_max = 50,
                     output_selected_ts = FALSE, output_removed_ts = FALSE,
@@ -73,6 +84,36 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     stop('Please specify a correct detrend code!')
 
   # pre-process noise data
+  if (pre_filter_flag) {
+    if (!is.na(hpass_fc)) {
+      res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      h1 <- res$flt_ts
+
+      res <- bw_pass(ts = h2, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      h2 <- res$flt_ts
+
+      res <- bw_pass(ts = v, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      v <- res$flt_ts
+    }
+    if (!is.na(lpass_fc)) {
+      res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_lpass_fc, nPole = pre_filter_nPole_lp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      h1 <- res$flt_ts
+
+      res <- bw_pass(ts = h2, dt = dt, fc = pre_filter_lpass_fc, nPole = pre_filter_nPole_lp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      h2 <- res$flt_ts
+
+      res <- bw_pass(ts = v, dt = dt, fc = pre_filter_lpass_fc, nPole = pre_filter_nPole_lp,
+                     is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
+      v <- res$flt_ts
+    }
+  }
+
+
   if (is_noise) {
     npts_win <- win_width / dt
     npts_over <- overlapping / dt
@@ -207,7 +248,10 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                         v_wins = v_wins, dt = dt, horizontal_comb = horizontal_comb, freq_hv_mean = freq_hv_mean,
                         polar_curves_flag = FALSE)
     fd_select <- fd_plt_select(hvsr_list = hvsr_list, freq_hv_mean = freq_hv_mean, freq_min = output_freq_min,
-                               freq_max = output_freq_max, hpass_fc = hpass_fc, lpass_fc = lpass_fc,
+                               freq_max = output_freq_max,
+                               pre_filter_flag = pre_filter_flag, pre_filter_hpass_fc = pre_filter_hpass_fc,
+                               pre_filter_lpass_fc = pre_filter_lpass_fc,
+                               filter_flag = filter_flag, hpass_fc = hpass_fc, lpass_fc = lpass_fc,
                                distribution = distribution)
     iidx_select <- fd_select$idx_select
     print("Frequency-domain selection is DONE!")
