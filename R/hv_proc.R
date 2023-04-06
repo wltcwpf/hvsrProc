@@ -29,10 +29,12 @@
 #' @param nPole_lp The pole parameter for low-pass. Default is 4
 #' @param order_zero_padding The order needs to be added for zeroes padding at the end of recordings to
 #' increase the number of data points to a power of 2. Default is 2
-#' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.
-#' @param taper_flag The flag indicates if Taper is applied to noise. The corrected strong motions do not apply
 #' @param t_front The percentage of taperring for the beginning of the time series.
 #' @param t_end The percentage of taperring for the end of the time series.
+#' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.
+#' @param taper_flag The flag indicates if Taper is applied to noise. The corrected strong motions do not apply
+#' @param pre_filter_t_front The percentage of taperring for the beginning of the time series in the pre-filter.
+#' @param pre_filter_t_end The percentage of taperring for the end of the time series in the pre-filter.
 #' @param horizontal_comb The parameter specifies the combination of two horizontal components. ps_RotD50: rotated combination at the angle where PGA is median; geometric_mean: geometric mean (sqrt(h1(f) * h2(f))); squared_average: squared average (sqrt((h1(f)^2 + h2(f)^2)/2))
 #' @param ko_smooth_flag The flag indicates if KO smoothing is applied.
 #' @param ko_smooth_b The coefficient of bandwidth. Default is 20. A smaller value will lead to more smoothing
@@ -65,7 +67,8 @@
 hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, output_pf_flnm = 'Test_',
                     distribution = 'normal', pre_filter_flag = FALSE, pre_filter_is_causal = FALSE,
                     pre_filter_hpass_fc = 0.1, pre_filter_lpass_fc = NA, pre_filter_nPole_hp = 5,
-                    pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 2,
+                    pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 2, pre_filter_t_front = 5,
+                    pre_filter_t_end = 5,
                     filter_flag = TRUE, is_causal = FALSE, hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4,
                     order_zero_padding = 2, detrend = 1,
                     taper_flag = TRUE, t_front = 5, t_end = 5, horizontal_comb = 'geometric_mean', ko_smooth_flag = TRUE, ko_smooth_b = 20,
@@ -85,6 +88,9 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
 
   # pre-process noise data
   if (pre_filter_flag) {
+    h1 <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
+    h2 <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
+    v <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
     if (!is.na(hpass_fc)) {
       res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
                      is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)

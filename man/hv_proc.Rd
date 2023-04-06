@@ -21,6 +21,8 @@ hv_proc(
   pre_filter_nPole_hp = 5,
   pre_filter_nPole_lp = 4,
   pre_filter_order_zero_padding = 2,
+  pre_filter_t_front = 5,
+  pre_filter_t_end = 5,
   filter_flag = TRUE,
   is_causal = FALSE,
   hpass_fc = 0.1,
@@ -95,6 +97,10 @@ We recommend normal for noise data and log_normal for corrected strong motions}
 
 \item{pre_filter_order_zero_padding}{The order needs in per-filter to be added for zeroes padding at the end of recordings to
 increase the number of data points to a power of 2. Default is 2.}
+
+\item{pre_filter_t_front}{The percentage of taperring for the beginning of the time series in the pre-filter.}
+
+\item{pre_filter_t_end}{The percentage of taperring for the end of the time series in the pre-filter.}
 
 \item{filter_flag}{The flag indicates if filter is applied to noise. The corrected strong motions do not apply}
 
