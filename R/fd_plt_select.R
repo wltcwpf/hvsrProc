@@ -40,7 +40,7 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
                          v_mat[freq_hv_mean >= visual_freq_min, ]))
   par(mfrow = c(1, 2))
   plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
-       ylab = 'FAS', log = 'xy', xaxt = 'n')
+       ylab = 'FAS', log = 'xy', xaxt = 'n', yaxt = 'n')
   log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'xy', tick_type = 'lin')
   abline(v = x_range[2], lwd = 2)
   if (pre_filter_flag) {
@@ -121,7 +121,7 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
 
     par(mfrow = c(1, 2))
     plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
-         ylab = 'FAS', log = 'xy', xaxt = 'n')
+         ylab = 'FAS', log = 'xy', xaxt = 'n', yaxt = 'n')
     log10_ticks(x = x_range, y = c(ind_y_range[1], ind_y_range[2]*1.5), log10_scale = 'xy', tick_type = 'lin')
     abline(v = x_range[2], lwd = 2)
     if (pre_filter_flag) {
