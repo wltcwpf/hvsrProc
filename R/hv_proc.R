@@ -21,6 +21,8 @@
 #' @param pre_filter_nPole_lp The pole parameter for low-pass in per-filter. Default is 4
 #' @param pre_filter_order_zero_padding The order needs in per-filter to be added for zeroes padding at the end of recordings to
 #' increase the number of data points to a power of 2. Default is 2.
+#' @param pre_filter_t_front The percentage of taperring for the beginning of the time series in the pre-filter.
+#' @param pre_filter_t_end The percentage of taperring for the end of the time series in the pre-filter.
 #' @param filter_flag The flag indicates if filter is applied to noise. The corrected strong motions do not apply
 #' @param is_causal A binary to indicator if causal is applied to noise. Apply causal if is_causal = TRUE and apply acausal if is_causal = FALSE
 #' @param hpass_fc The corner frequency for high-pass filter
@@ -29,12 +31,10 @@
 #' @param nPole_lp The pole parameter for low-pass. Default is 4
 #' @param order_zero_padding The order needs to be added for zeroes padding at the end of recordings to
 #' increase the number of data points to a power of 2. Default is 2
-#' @param t_front The percentage of taperring for the beginning of the time series.
-#' @param t_end The percentage of taperring for the end of the time series.
 #' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.
 #' @param taper_flag The flag indicates if Taper is applied to noise. The corrected strong motions do not apply
-#' @param pre_filter_t_front The percentage of taperring for the beginning of the time series in the pre-filter.
-#' @param pre_filter_t_end The percentage of taperring for the end of the time series in the pre-filter.
+#' @param t_front The percentage of taperring for the beginning of the time series.
+#' @param t_end The percentage of taperring for the end of the time series.
 #' @param horizontal_comb The parameter specifies the combination of two horizontal components. ps_RotD50: rotated combination at the angle where PGA is median; geometric_mean: geometric mean (sqrt(h1(f) * h2(f))); squared_average: squared average (sqrt((h1(f)^2 + h2(f)^2)/2))
 #' @param ko_smooth_flag The flag indicates if KO smoothing is applied.
 #' @param ko_smooth_b The coefficient of bandwidth. Default is 20. A smaller value will lead to more smoothing
