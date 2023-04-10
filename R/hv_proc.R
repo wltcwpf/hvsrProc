@@ -89,8 +89,8 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
   # pre-process noise data
   if (pre_filter_flag) {
     h1 <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
-    h2 <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
-    v <- taper(h1, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
+    h2 <- taper(h2, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
+    v <- taper(v, t_front = pre_filter_t_front, t_end = pre_filter_t_end)
     if (!is.na(hpass_fc)) {
       res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
                      is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
