@@ -136,14 +136,14 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
       if (!is.na(lpass_fc))
         abline(v = lpass_fc, lwd = 2, col = 'purple')
     }
-    for(i_plot in 1:ncol(hvsr_mat)){
+    for(i_plot in idx_select){
       lines(freq_hv_mean, h1_mat[,i_plot], col = adjustcolor('red', alpha.f = 0.2), lwd = 0.5)
       lines(freq_hv_mean, h2_mat[,i_plot], col = adjustcolor('green', alpha.f = 0.2), lwd = 0.5)
       lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
     }
-    lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
-    lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
-    lines(freq_hv_mean, apply(v_mat, 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+    lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
+    lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
+    lines(freq_hv_mean, apply(v_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
     legend('topright', legend = c('H1', 'H2', 'V'), col = c('red', 'green', 'blue'), lty = 1,
            lwd = 2)
 
