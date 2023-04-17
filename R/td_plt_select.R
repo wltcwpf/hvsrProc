@@ -106,19 +106,25 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
       p <- locator(1)
     }
 
-    iidx_select <- c(sapply(idx_select, function(x) 2 * (x - 1) + seq(1, 2)))
-    h1_range <- range(unlist(lapply(h1_wins, range))[iidx_select])
-    h2_range <- range(unlist(lapply(h2_wins, range))[iidx_select])
+    # iidx_select <- c(sapply(idx_select, function(x) 2 * (x - 1) + seq(1, 2)))
+    # h1_range <- range(unlist(lapply(h1_wins, range))[iidx_select])
+    # h2_range <- range(unlist(lapply(h2_wins, range))[iidx_select])
+    h1_range <- range(c(sapply(idx_select, function(x) range(h1_wins[[x]]))))
+    h2_range <- range(c(sapply(idx_select, function(x) range(h2_wins[[x]]))))
     shift_1 <- h2_range[2] - h1_range[1]
     h2_wins_sh <- lapply(h2_wins, function(x, shift_1) { x <- x - shift_1 }, shift_1 = shift_1)
     h2_range <- range(unlist(lapply(h2_wins_sh, range)))
-    v_range <- range(unlist(lapply(v_wins, range))[iidx_select])
+    # v_range <- range(unlist(lapply(v_wins, range))[iidx_select])
+    v_range <- range(c(sapply(idx_select, function(x) range(v_wins[[x]]))))
     shift_2 <- v_range[2] - h2_range[1]
     v_wins_sh <- lapply(v_wins, function(x, shift_2) { x <- x - shift_2 }, shift_2 = shift_2)
     x_range <- range(c(0, dt * tt_len))
-    y_range <- range(c(range(unlist(lapply(h1_wins, range))[iidx_select]),
-                       range(unlist(lapply(h2_wins_sh, range))[iidx_select]),
-                       range(unlist(lapply(v_wins_sh, range))[iidx_select])))
+    # y_range <- range(c(range(unlist(lapply(h1_wins, range))[iidx_select]),
+    #                    range(unlist(lapply(h2_wins_sh, range))[iidx_select]),
+    #                    range(unlist(lapply(v_wins_sh, range))[iidx_select])))
+    y_range <- range(c(h1_range,
+                       h2_range - shift_1,
+                       v_range - shift_2))
 
     plot(x_range, y_range, type = 'n', xlab = 'Time (s)', ylab = 'Acc.', yaxt = 'n')
     abline(v = x_range[2], lwd = 2)
