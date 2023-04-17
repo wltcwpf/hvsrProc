@@ -42,6 +42,7 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
                      range(unlist(lapply(v_wins_sh, range)))))
 
   # generate the plot
+  par(mfrow = c(1,1))
   plot(x_range, y_range, type = 'n', xlab = 'Time (s)', ylab = 'Acc.', yaxt = 'n')
   abline(v = x_range[2], lwd = 2)
   for (i_plot in 1:num_wins) {
@@ -105,7 +106,7 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
       p <- locator(1)
     }
 
-    iidx_select <- c(sapply(idx_select, function(x) 2 * (x - 1) + seq( 1, 2)))
+    iidx_select <- c(sapply(idx_select, function(x) 2 * (x - 1) + seq(1, 2)))
     h1_range <- range(unlist(lapply(h1_wins, range))[iidx_select])
     h2_range <- range(unlist(lapply(h2_wins, range))[iidx_select])
     shift_1 <- h2_range[2] - h1_range[1]
