@@ -254,7 +254,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     hvsr_list <- lapply(idx_select, hvsr_win_calc, h1_wins = h1_wins, h2_wins = h2_wins,
                         v_wins = v_wins, dt = dt, horizontal_comb = horizontal_comb, freq_hv_mean = freq_hv_mean,
                         polar_curves_flag = FALSE)
-    fd_select <- fd_plt_select(hvsr_list = hvsr_list, robust_est = FALSE,
+    fd_select <- fd_plt_select(hvsr_list = hvsr_list, robust_est = robust_est,
                                freq_hv_mean = freq_hv_mean, freq_min = output_freq_min,
                                freq_max = output_freq_max,
                                pre_filter_flag = pre_filter_flag, pre_filter_hpass_fc = pre_filter_hpass_fc,

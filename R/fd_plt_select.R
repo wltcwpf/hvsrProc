@@ -223,7 +223,6 @@ fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min,
   res$idx_select <- idx_select
   res$hvsr_mean <- hvsr_mean
   res$hvsr_sd <- hvsr_sd
-  if (robust_est)
-    res$hvsr_sd1 <- hvsr_sd1
+  if (robust_est) res$hvsr_sd1 <- hvsr_sd1
   return(res)
 }
