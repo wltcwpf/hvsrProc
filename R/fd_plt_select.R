@@ -61,9 +61,9 @@ fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min,
     lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
   }
   if (robust_est) {
-    lines(freq_hv_mean, apply(h1_mat, 1, function(x) median), col = 'red', lwd = 2)
-    lines(freq_hv_mean, apply(h2_mat, 1, function(x) median), col = 'green', lwd = 2)
-    lines(freq_hv_mean, apply(v_mat, 1, function(x) median), col = 'blue', lwd = 2)
+    lines(freq_hv_mean, apply(h1_mat, 1, median), col = 'red', lwd = 2)
+    lines(freq_hv_mean, apply(h2_mat, 1, median), col = 'green', lwd = 2)
+    lines(freq_hv_mean, apply(v_mat, 1, median), col = 'blue', lwd = 2)
   } else {
     lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
     lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
@@ -160,9 +160,9 @@ fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min,
     }
 
     if (robust_est) {
-      lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) median), col = 'red', lwd = 2)
-      lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) median), col = 'green', lwd = 2)
-      lines(freq_hv_mean, apply(v_mat[, idx_select], 1, function(x) median), col = 'blue', lwd = 2)
+      lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, median), col = 'red', lwd = 2)
+      lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, median), col = 'green', lwd = 2)
+      lines(freq_hv_mean, apply(v_mat[, idx_select], 1, median), col = 'blue', lwd = 2)
     } else {
       lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
       lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
