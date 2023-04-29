@@ -65,7 +65,8 @@
 #' @importFrom utils read.csv write.csv
 #' @export
 hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, output_pf_flnm = 'Test_',
-                    distribution = 'normal', pre_filter_flag = FALSE, pre_filter_is_causal = FALSE,
+                    distribution = 'normal', robust_est = FALSE,
+                    pre_filter_flag = FALSE, pre_filter_is_causal = FALSE,
                     pre_filter_hpass_fc = 0.1, pre_filter_lpass_fc = NA, pre_filter_nPole_hp = 5,
                     pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 2, pre_filter_t_front = 5,
                     pre_filter_t_end = 5,
@@ -253,7 +254,8 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     hvsr_list <- lapply(idx_select, hvsr_win_calc, h1_wins = h1_wins, h2_wins = h2_wins,
                         v_wins = v_wins, dt = dt, horizontal_comb = horizontal_comb, freq_hv_mean = freq_hv_mean,
                         polar_curves_flag = FALSE)
-    fd_select <- fd_plt_select(hvsr_list = hvsr_list, freq_hv_mean = freq_hv_mean, freq_min = output_freq_min,
+    fd_select <- fd_plt_select(hvsr_list = hvsr_list, robust_est = FALSE,
+                               freq_hv_mean = freq_hv_mean, freq_min = output_freq_min,
                                freq_max = output_freq_max,
                                pre_filter_flag = pre_filter_flag, pre_filter_hpass_fc = pre_filter_hpass_fc,
                                pre_filter_lpass_fc = pre_filter_lpass_fc,
@@ -288,8 +290,13 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
 
       if (output_mean_curve) {
         outputflname_hvsr_mean <- paste0(output_pf_flnm, 'hvsr_mean.csv')
-        hvsr_mean_out <- cbind(freq_hv_mean, fd_select$hvsr_mean, fd_select$hvsr_sd)
-        colnames(hvsr_mean_out) <- c('freq_Hz', 'HVSR mean', 'HVSR sd')
+        if (robust_est) {
+          hvsr_mean_out <- cbind(freq_hv_mean, fd_select$hvsr_mean, fd_select$hvsr_sd, fd_select$hvsr_sd1)
+          colnames(hvsr_mean_out) <- c('freq_Hz', 'HVSR median', 'HVSR mad', 'HVSR IQR')
+        } else {
+          hvsr_mean_out <- cbind(freq_hv_mean, fd_select$hvsr_mean, fd_select$hvsr_sd)
+          colnames(hvsr_mean_out) <- c('freq_Hz', 'HVSR mean', 'HVSR sd')
+        }
         if (!is.na(output_freq_min) & output_freq_min > min(hvsr_mean_out[, 1])) {
           idx_min <- which(hvsr_mean_out[, 1] >= output_freq_min)
           hvsr_mean_out <- hvsr_mean_out[idx_min, ]

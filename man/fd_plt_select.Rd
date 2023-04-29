@@ -6,6 +6,7 @@
 \usage{
 fd_plt_select(
   hvsr_list,
+  robust_est = FALSE,
   freq_hv_mean,
   freq_min,
   freq_max,

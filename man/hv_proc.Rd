@@ -14,6 +14,7 @@ hv_proc(
   output_dir,
   output_pf_flnm = "Test_",
   distribution = "normal",
+  robust_est = FALSE,
   pre_filter_flag = FALSE,
   pre_filter_is_causal = FALSE,
   pre_filter_hpass_fc = 0.1,

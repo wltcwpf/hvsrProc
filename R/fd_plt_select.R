@@ -15,9 +15,9 @@
 #' @return The lefted indices of windows after frequency-domain rejection
 #' @importFrom graphics plot abline lines legend locator text
 #' @importFrom grDevices dev.off adjustcolor
-#' @importFrom stats sd
+#' @importFrom stats sd median mad IQR
 #' @export
-fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
+fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min, freq_max,
                           pre_filter_flag, pre_filter_hpass_fc, pre_filter_lpass_fc,
                           filter_flag, hpass_fc, lpass_fc, distribution) {
 
@@ -60,9 +60,15 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
     lines(freq_hv_mean, h2_mat[,i_plot], col = adjustcolor('green', alpha.f = 0.2), lwd = 0.5)
     lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
   }
-  lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
-  lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
-  lines(freq_hv_mean, apply(v_mat, 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+  if (robust_est) {
+    lines(freq_hv_mean, apply(h1_mat, 1, function(x) median), col = 'red', lwd = 2)
+    lines(freq_hv_mean, apply(h2_mat, 1, function(x) median), col = 'green', lwd = 2)
+    lines(freq_hv_mean, apply(v_mat, 1, function(x) median), col = 'blue', lwd = 2)
+  } else {
+    lines(freq_hv_mean, apply(h1_mat, 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
+    lines(freq_hv_mean, apply(h2_mat, 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
+    lines(freq_hv_mean, apply(v_mat, 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+  }
   legend('topright', legend = c('H1', 'H2', 'V'), col = c('red', 'green', 'blue'), lty = 1,
          lwd = 2)
 
@@ -86,21 +92,32 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
   for(i_plot in 1:ncol(hvsr_mat)){
     lines(freq_hv_mean, hvsr_mat[,i_plot])
   }
-  if (distribution == 'normal') {
-    hvsr_mean <- apply(hvsr_mat, 1, mean)
-    hvsr_sd <- apply(hvsr_mat, 1, sd) # /sqrt(ncol(hvsr_mat))
+
+  if (robust_est){
+    hvsr_mean <- apply(hvsr_mat, 1, median)
+    hvsr_sd <- apply(hvsr_mat, 1, mad) # /sqrt(ncol(hvsr_mat))
+    hvsr_sd1 <- apply(hvsr_mat, 1, IQR)
     lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
     lines(freq_hv_mean, hvsr_mean - hvsr_sd, lwd = 2, col = 'blue', lty = 2)
     lines(freq_hv_mean, hvsr_mean + hvsr_sd, lwd = 2, col = 'blue', lty = 2)
     legend('top', 'Please select HVSR curves for removal.', bg = 'white')
-  } else if (distribution == 'log_normal') {
-    hvsr_mat[hvsr_mat <= 0] <- 10e-5  # avoid log(0 or negative)
-    hvsr_mean <- exp(apply(log(hvsr_mat), 1, mean))
-    hvsr_sd <- apply(log(hvsr_mat), 1, sd) # /sqrt(ncol(hvsr_mat))
-    lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
-    lines(freq_hv_mean, hvsr_mean / exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
-    lines(freq_hv_mean, hvsr_mean * exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
-    legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+  } else {
+    if (distribution == 'normal') {
+      hvsr_mean <- apply(hvsr_mat, 1, mean)
+      hvsr_sd <- apply(hvsr_mat, 1, sd) # /sqrt(ncol(hvsr_mat))
+      lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
+      lines(freq_hv_mean, hvsr_mean - hvsr_sd, lwd = 2, col = 'blue', lty = 2)
+      lines(freq_hv_mean, hvsr_mean + hvsr_sd, lwd = 2, col = 'blue', lty = 2)
+      legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+    } else if (distribution == 'log_normal') {
+      hvsr_mat[hvsr_mat <= 0] <- 10e-5  # avoid log(0 or negative)
+      hvsr_mean <- exp(apply(log(hvsr_mat), 1, mean))
+      hvsr_sd <- apply(log(hvsr_mat), 1, sd) # /sqrt(ncol(hvsr_mat))
+      lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
+      lines(freq_hv_mean, hvsr_mean / exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
+      lines(freq_hv_mean, hvsr_mean * exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
+      legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+    }
   }
 
   p <- locator(1)
@@ -141,9 +158,16 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
       lines(freq_hv_mean, h2_mat[,i_plot], col = adjustcolor('green', alpha.f = 0.2), lwd = 0.5)
       lines(freq_hv_mean, v_mat[,i_plot], col = adjustcolor('blue', alpha.f = 0.2), lwd = 0.5)
     }
-    lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
-    lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
-    lines(freq_hv_mean, apply(v_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+
+    if (robust_est) {
+      lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) median), col = 'red', lwd = 2)
+      lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) median), col = 'green', lwd = 2)
+      lines(freq_hv_mean, apply(v_mat[, idx_select], 1, function(x) median), col = 'blue', lwd = 2)
+    } else {
+      lines(freq_hv_mean, apply(h1_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'red', lwd = 2)
+      lines(freq_hv_mean, apply(h2_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'green', lwd = 2)
+      lines(freq_hv_mean, apply(v_mat[, idx_select], 1, function(x) exp(mean(log(x)))), col = 'blue', lwd = 2)
+    }
     legend('topright', legend = c('H1', 'H2', 'V'), col = c('red', 'green', 'blue'), lty = 1,
            lwd = 2)
 
@@ -166,20 +190,31 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
     for(i_plot in idx_select){
       lines(freq_hv_mean, hvsr_mat[,i_plot])
     }
-    if (distribution == 'normal') {
-      hvsr_mean <- apply(hvsr_mat[, idx_select], 1, mean)
-      hvsr_sd <- apply(hvsr_mat[, idx_select], 1, sd) # /sqrt(ncol(hvsr_mat))
+
+    if (robust_est) {
+      hvsr_mean <- apply(hvsr_mat[, idx_select], 1, median)
+      hvsr_sd <- apply(hvsr_mat[, idx_select], 1, mad) # /sqrt(ncol(hvsr_mat))
+      hvsr_sd1 <- apply(hvsr_mat, 1, IQR)
       lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
       lines(freq_hv_mean, hvsr_mean - hvsr_sd, lwd = 2, col = 'blue', lty = 2)
       lines(freq_hv_mean, hvsr_mean + hvsr_sd, lwd = 2, col = 'blue', lty = 2)
       legend('top', 'Please select HVSR curves for removal.', bg = 'white')
-    } else if (distribution == 'log_normal') {
-      hvsr_mean <- exp(apply(log(hvsr_mat[, idx_select]), 1, mean))
-      hvsr_sd <- apply(log(hvsr_mat[, idx_select]), 1, sd) # /sqrt(ncol(hvsr_mat))
-      lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
-      lines(freq_hv_mean, hvsr_mean / exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
-      lines(freq_hv_mean, hvsr_mean * exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
-      legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+    } else {
+      if (distribution == 'normal') {
+        hvsr_mean <- apply(hvsr_mat[, idx_select], 1, mean)
+        hvsr_sd <- apply(hvsr_mat[, idx_select], 1, sd) # /sqrt(ncol(hvsr_mat))
+        lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
+        lines(freq_hv_mean, hvsr_mean - hvsr_sd, lwd = 2, col = 'blue', lty = 2)
+        lines(freq_hv_mean, hvsr_mean + hvsr_sd, lwd = 2, col = 'blue', lty = 2)
+        legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+      } else if (distribution == 'log_normal') {
+        hvsr_mean <- exp(apply(log(hvsr_mat[, idx_select]), 1, mean))
+        hvsr_sd <- apply(log(hvsr_mat[, idx_select]), 1, sd) # /sqrt(ncol(hvsr_mat))
+        lines(freq_hv_mean, hvsr_mean, lwd = 3, col = 'red')
+        lines(freq_hv_mean, hvsr_mean / exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
+        lines(freq_hv_mean, hvsr_mean * exp(hvsr_sd), lwd = 2, col = 'blue', lty = 2)
+        legend('top', 'Please select HVSR curves for removal.', bg = 'white')
+      }
     }
     p <- locator(1)
   }
@@ -188,5 +223,7 @@ fd_plt_select <- function(hvsr_list, freq_hv_mean, freq_min, freq_max,
   res$idx_select <- idx_select
   res$hvsr_mean <- hvsr_mean
   res$hvsr_sd <- hvsr_sd
+  if (robust_est)
+    res$hvsr_sd1 <- hvsr_sd1
   return(res)
 }
