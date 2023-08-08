@@ -395,6 +395,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
         Meta_output[1] <- 1/dt   # Hz
         Meta_output[2] <- length(h1) * dt /60   # total duration
         Meta_output[3] <- ifelse(detrend == 0, 'no detrend', ifelse(detrend == 1, 'mean removal', ifelse(detrend == 2, 'linear detrend', 'fifth order polynomial detrend')))  # detrend
+        Meta_output[4] <- win_width
         Meta_output[5] <- overlapping
         Meta_output[6] <- 'Tukey'
         Meta_output[7] <- t_front

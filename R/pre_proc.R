@@ -19,6 +19,7 @@
 #' PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).)
 #' @return The filtered time series
 #' @importFrom stats lm
+#' @importFrom stats weighted.mean
 #' @export
 pre_proc <- function(ts, dt, detrend = 1, taper_flag = TRUE, t_front, t_end, filter_flag = TRUE,
                      fc, nPole, is_causal, order_zero_padding) {
@@ -27,7 +28,12 @@ pre_proc <- function(ts, dt, detrend = 1, taper_flag = TRUE, t_front, t_end, fil
   if (detrend == 0) {
     ts <- ts
   } else if (detrend == 1) {
-    ts <- mean_removal(ts)
+    # ts <- mean_removal(ts)
+
+    win <- taper(rep(1, length(ts)), t_front = t_front, t_end = t_end)
+    ts_avg <- weighted.mean(ts, win)
+    ts <- (ts - ts_avg)
+
   } else if (detrend == 2) {
     ts <- lm(ts ~ seq(1, length(ts)))$residuals
   } else if (detrend == 6) {
