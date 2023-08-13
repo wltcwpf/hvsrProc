@@ -17,6 +17,7 @@ Rcpp::NumericVector mean_removal(Rcpp::NumericVector ts, int nDC = -1) {
 
   double mean = 0;
   int ts_len = ts.size(), mean_len = ts.size();
+  NumericVector ts_new(ts_len);
   if (nDC > 0) {
     mean_len = nDC;
   }
@@ -26,8 +27,8 @@ Rcpp::NumericVector mean_removal(Rcpp::NumericVector ts, int nDC = -1) {
   mean = mean / mean_len;
 
   for (int i = 0; i < ts_len; i++) {
-    ts[i] = ts[i] - mean;
+    ts_new[i] = ts[i] - mean;
   }
 
-  return ts;
+  return ts_new;
 }
