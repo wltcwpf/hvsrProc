@@ -17,6 +17,9 @@ Rcpp::NumericVector taper(Rcpp::NumericVector ts, double t_front = 5, double t_e
 
   int ts_len = ts.size();
   NumericVector ts_new(ts_len);
+  for (int i = 0; i < ts_len; i++) {
+    ts_new[i] = ts[i];
+  }
   if (t_front > 0) {
     int num_front = floor(ts_len * t_front / 100);
     for (int i = 0; i < num_front; i++){
