@@ -11,10 +11,10 @@
 #' increase the number of data points to a power of 2 (Kishida T., Darragh R.B., Chiou B.S.J., Bozorgnia Y., Mazzoni S.,
 #' Contreras V., Boroschek R., Rojas F., Stewart J.P., 2020.
 #' Chapter 3: Ground Motions and Intensity Measures, in Data Resources for NGA-Subduction Project,
-#' PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).)
+#' PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).). Default is 0 (no zero-padding).
 #' @return The filtered time series
 #' @export
-bw_pass <- function(ts, dt, fc, nPole = 4, is_causal = FALSE, order_zero_padding = 4) {
+bw_pass <- function(ts, dt, fc, nPole = 4, is_causal = FALSE, order_zero_padding = 0) {
 
   npts <- length(ts)
   nfft <- ifelse(order_zero_padding > 0, 2^(floor(logb(npts, 2)) + order_zero_padding), npts)

@@ -4,7 +4,7 @@
 \alias{bw_pass}
 \title{Low-pass Butterworth filter}
 \usage{
-bw_pass(ts, dt, fc, nPole = 4, is_causal = FALSE, order_zero_padding = 4)
+bw_pass(ts, dt, fc, nPole = 4, is_causal = FALSE, order_zero_padding = 0)
 }
 \arguments{
 \item{ts}{An array of time series}
@@ -22,7 +22,7 @@ Generally, nPole = 4 for low-pass and nPole = -5 for high-pass}
 increase the number of data points to a power of 2 (Kishida T., Darragh R.B., Chiou B.S.J., Bozorgnia Y., Mazzoni S.,
 Contreras V., Boroschek R., Rojas F., Stewart J.P., 2020.
 Chapter 3: Ground Motions and Intensity Measures, in Data Resources for NGA-Subduction Project,
-PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).)}
+PEER Report 2020/02, J.P. Stewart (editor), Pacific Earthquake Engineering Research Center, UC Berkeley (headquarters).). Default is 0 (no zero-padding).}
 }
 \value{
 The filtered time series
