@@ -20,7 +20,7 @@
 #' @param pre_filter_nPole_hp The pole parameter for high-pass in per-filter. Default is 5
 #' @param pre_filter_nPole_lp The pole parameter for low-pass in per-filter. Default is 4
 #' @param pre_filter_order_zero_padding The order needs in per-filter to be added for zeroes padding at the end of recordings to
-#' increase the number of data points to a power of 2. Default is 2.
+#' increase the number of data points to a power of 2. Default is 0 (no zero-padding).
 #' @param pre_filter_t_front The percentage of taperring for the beginning of the time series in the pre-filter.
 #' @param pre_filter_t_end The percentage of taperring for the end of the time series in the pre-filter.
 #' @param filter_flag The flag indicates if filter is applied to noise. The corrected strong motions do not apply
@@ -30,7 +30,7 @@
 #' @param nPole_hp The pole parameter for high-pass. Default is 5
 #' @param nPole_lp The pole parameter for low-pass. Default is 4
 #' @param order_zero_padding The order needs to be added for zeroes padding at the end of recordings to
-#' increase the number of data points to a power of 2. Default is 2
+#' increase the number of data points to a power of 2. Default is 0 (no zero-padding).
 #' @param detrend The indicator specifies which detrend method is used. 0: no detrend; 1: mean removal; 2: linear trend removal; 6: fifth order polynomial detrend.
 #' @param taper_flag The flag indicates if Taper is applied to noise. The corrected strong motions do not apply
 #' @param t_front The percentage of taperring for the beginning of the time series.
@@ -69,10 +69,10 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                     distribution = 'normal', robust_est = FALSE,
                     pre_filter_flag = FALSE, pre_filter_is_causal = FALSE,
                     pre_filter_hpass_fc = 0.1, pre_filter_lpass_fc = NA, pre_filter_nPole_hp = 5,
-                    pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 2, pre_filter_t_front = 5,
+                    pre_filter_nPole_lp = 4, pre_filter_order_zero_padding = 0, pre_filter_t_front = 5,
                     pre_filter_t_end = 5,
                     filter_flag = TRUE, is_causal = FALSE, hpass_fc = 0.1, lpass_fc = NA, nPole_hp = 5, nPole_lp = 4,
-                    order_zero_padding = 2, detrend = 1,
+                    order_zero_padding = 0, detrend = 1,
                     taper_flag = TRUE, t_front = 5, t_end = 5, horizontal_comb = 'geometric_mean', ko_smooth_flag = TRUE, ko_smooth_b = 20,
                     parzen_flag = FALSE, parzen_bwidth = 1.5, win_width = 150, overlapping = 0,
                     sta_lta_flag = FALSE, sta_lta_moving_term_len = 1, short_term_len = 1, long_term_len = 30,
