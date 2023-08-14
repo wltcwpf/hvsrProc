@@ -17,10 +17,11 @@
 bw_pass <- function(ts, dt, fc, nPole = 4, is_causal = FALSE, order_zero_padding = 4) {
 
   npts <- length(ts)
-  nfft <- 2^(floor(logb(npts, 2)) + order_zero_padding)
+  nfft <- ifelse(order_zero_padding > 0, 2^(floor(logb(npts, 2)) + order_zero_padding), npts)
   nNyq <- nfft / 2 + 1
-  df <- 1.0 / (nfft * dt)
+  df <- 1 / (nfft * dt)
   freq <- ((1:nNyq) - 1) * df
+
   # zero padding at the end of recordings
   ts <- c(ts, rep(0, nfft - npts))
   ts_fft <- stats::fft(ts)
