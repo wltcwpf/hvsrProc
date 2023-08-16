@@ -151,28 +151,54 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     }
 
     # pre-processing
-    if (!is.na(hpass_fc) & filter_flag) {
-      h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                         t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
-                         is_causal = is_causal, order_zero_padding = order_zero_padding)
-      h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                         t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
-                         is_causal = is_causal, order_zero_padding = order_zero_padding)
-      v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                        t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
-                        is_causal = is_causal, order_zero_padding = order_zero_padding)
-    }
+    if (filter_flag) { # apply filter
 
-    if (!is.na(lpass_fc) & filter_flag) {
+      if (!is.na(hpass_fc) | !is.na(lpass_fc)) { # if either hpass_fc or lpass_fc is not NA
+
+        if (!is.na(hpass_fc)) { # apply hpass
+          h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                            t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
+                            is_causal = is_causal, order_zero_padding = order_zero_padding)
+          h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                            t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
+                            is_causal = is_causal, order_zero_padding = order_zero_padding)
+          v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                           t_end = t_end, filter_flag = filter_flag, fc = hpass_fc, nPole = -nPole_hp,
+                           is_causal = is_causal, order_zero_padding = order_zero_padding)
+        }
+
+        if (!is.na(lpass_fc)) { # apply lpass
+          h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                            t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
+                            is_causal = is_causal, order_zero_padding = order_zero_padding)
+          h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                            t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
+                            is_causal = is_causal, order_zero_padding = order_zero_padding)
+          v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                           t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
+                           is_causal = is_causal, order_zero_padding = order_zero_padding)
+        }
+      } else { # if both hpass and lpass are NA
+        h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                          t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
+                          is_causal = is_causal, order_zero_padding = order_zero_padding)
+        h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                          t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
+                          is_causal = is_causal, order_zero_padding = order_zero_padding)
+        v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
+                         t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
+                         is_causal = is_causal, order_zero_padding = order_zero_padding)
+      }
+    } else { # Do not apply filter
       h1_wins <- lapply(h1_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                        t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
+                        t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
       h2_wins <- lapply(h2_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                        t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
+                        t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
                         is_causal = is_causal, order_zero_padding = order_zero_padding)
       v_wins <- lapply(v_wins, pre_proc, dt = dt, detrend = detrend, taper_flag = taper_flag, t_front = t_front,
-                        t_end = t_end, filter_flag = filter_flag, fc = lpass_fc, nPole = nPole_lp,
-                        is_causal = is_causal, order_zero_padding = order_zero_padding)
+                       t_end = t_end, filter_flag = FALSE, fc = hpass_fc, nPole = -nPole_hp,
+                       is_causal = is_causal, order_zero_padding = order_zero_padding)
     }
     print("Pre-processing noise data is DONE!")
   }
