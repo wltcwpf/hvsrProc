@@ -33,11 +33,11 @@ fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min,
     h2_mat[, i] <- hvsr_list[[ i ]]$h2_smooth
     v_mat[, i] <- hvsr_list[[ i ]]$v_smooth
   }
-  y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, ])
+  y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, ], na.rm = TRUE)
 
   ind_y_range <- range(c(h1_mat[freq_hv_mean >= visual_freq_min, ],
                          h2_mat[freq_hv_mean >= visual_freq_min, ],
-                         v_mat[freq_hv_mean >= visual_freq_min, ]))
+                         v_mat[freq_hv_mean >= visual_freq_min, ]), na.rm = TRUE)
   par(mfrow = c(1, 2))
   plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
        ylab = 'FAS', log = 'xy', xaxt = 'n', yaxt = 'n')
@@ -134,7 +134,7 @@ fd_plt_select <- function(hvsr_list, robust_est = FALSE, freq_hv_mean, freq_min,
       idx_select <- idx_select[-idx_temp]
       p <- locator(1)
     }
-    y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, idx_select])
+    y_range <- range(hvsr_mat[freq_hv_mean >= visual_freq_min, idx_select], na.rm = TRUE)
 
     par(mfrow = c(1, 2))
     plot(x_range, c(ind_y_range[1], ind_y_range[2]*1.5), type = 'n', xlab = 'Freq. (Hz)',
