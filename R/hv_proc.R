@@ -146,9 +146,9 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     v_wins <- rep(list(), length.out = num_wins)
     time_ts <- seq(1, length(h1)) * dt
     for (i in 1:num_wins) {
-      h1_wins[[ i ]] <- h1[((i - 1) * win_moving + 1):(i * win_moving)]
-      h2_wins[[ i ]] <- h2[((i - 1) * win_moving + 1):(i * win_moving)]
-      v_wins[[ i ]] <- v[((i - 1) * win_moving + 1):(i * win_moving)]
+      h1_wins[[ i ]] <- h1[((i - 1) * win_moving + 1):((i - 1) * win_moving + npts_win)]
+      h2_wins[[ i ]] <- h2[((i - 1) * win_moving + 1):((i - 1) * win_moving + npts_win)]
+      v_wins[[ i ]] <- v[((i - 1) * win_moving + 1):((i - 1) * win_moving + npts_win)]
     }
 
     # pre-processing
@@ -241,7 +241,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
       ts_sel_out <- matrix(data = NA, nrow = max_win_len, ncol = 4*length(idx_select))
       for (i in 1:length(idx_select)) {
         # ts_sel_out[, 4 * (i - 1) + 1] <- seq(1, length(h1_wins[[ idx_select[i] ]])) * dt
-        ts_sel_out[, 4 * (i - 1) + 1] <- time_ts[((idx_select[i] - 1) * win_moving + 1):(idx_select[i] * win_moving)]
+        ts_sel_out[, 4 * (i - 1) + 1] <- time_ts[((idx_select[i] - 1) * win_moving + 1):((idx_select[i] - 1) * win_moving + npts_win)]
         ts_sel_out[, 4 * (i - 1) + 2] <- h1_wins[[ idx_select[i] ]]
         ts_sel_out[, 4 * (i - 1) + 3] <- h2_wins[[ idx_select[i] ]]
         ts_sel_out[, 4 * (i - 1) + 4] <- v_wins[[ idx_select[i] ]]
@@ -262,7 +262,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
         ts_unsel_out <- matrix(data = NA, nrow = max_win_len, ncol = 4*length(idx_remove))
         for (i in 1:length(idx_remove)) {
           # ts_unsel_out[, 4 * (i - 1) + 1] <- seq(1, length(h1_wins[[ idx_remove[i] ]])) * dt
-          ts_unsel_out[, 4 * (i - 1) + 1] <- time_ts[((idx_remove[i] - 1) * win_moving + 1):(idx_remove[i] * win_moving)]
+          ts_unsel_out[, 4 * (i - 1) + 1] <- time_ts[((idx_remove[i] - 1) * win_moving + 1):((idx_remove[i] - 1) * win_moving + npts_win)]
           ts_unsel_out[, 4 * (i - 1) + 2] <- h1_wins[[ idx_remove[i] ]]
           ts_unsel_out[, 4 * (i - 1) + 3] <- h2_wins[[ idx_remove[i] ]]
           ts_unsel_out[, 4 * (i - 1) + 4] <- v_wins[[ idx_remove[i] ]]
