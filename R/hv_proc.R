@@ -100,7 +100,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
     h2 <- (h2 - h2_avg)*win
     v <- (v - v_avg)*win
 
-    if (!is.na(hpass_fc)) {
+    if (!is.na(pre_filter_hpass_fc)) {
       res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_hpass_fc, nPole = -pre_filter_nPole_hp,
                      is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
       h1 <- res$flt_ts
@@ -113,7 +113,7 @@ hv_proc <- function(is_noise = TRUE, h1, h2, v, dt, eqk_filepath, output_dir, ou
                      is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
       v <- res$flt_ts
     }
-    if (!is.na(lpass_fc)) {
+    if (!is.na(pre_filter_lpass_fc)) {
       res <- bw_pass(ts = h1, dt = dt, fc = pre_filter_lpass_fc, nPole = pre_filter_nPole_lp,
                      is_causal = pre_filter_is_causal, order_zero_padding = pre_filter_order_zero_padding)
       h1 <- res$flt_ts
