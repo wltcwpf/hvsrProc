@@ -24,10 +24,10 @@ td_plt_select <- function(h1_wins, h2_wins, v_wins, dt, sta_lta_flag, h1_stalta,
   cols <- rep(c('pink', 'lightgreen'), num_wins)
   len_wins <- unlist(lapply(h1_wins, length))
   tt_len <- sum(len_wins)
-  if (tt_len <= 21600) {
+  if (tt_len <= 108000) {
     auto_visual_deci <- 1
   } else {
-    auto_visual_deci <- floor(tt_len / 216000)  # 216000 is the max number of data points will be plotted
+    auto_visual_deci <- floor(tt_len / 108000)  # 216000 is the max number of data points will be plotted
   }
   t_begin <- (c(0, cumsum(len_wins)[-num_wins]) + 1) * dt
   t_end <- cumsum(len_wins) * dt
