@@ -9,10 +9,10 @@
 #' @name hvsrProc-package
 #' @aliases hvsrProc hvsrProc-package
 #'
-#' @note There are 20 hvsrProc functions:
+#' @note There are 21 hvsrProc functions:
 #' \code{ang_pga_rotd50_calc, bw_pass, bw_resp, fas_cal, fd_plt_select,
 #' hv_proc, hvsr_win_calc, ko_smooth, log10_ticks, logspace,
-#' mean_removal, parzen_smooth, plot_log10, pre_proc,
+#' mean_removal, parzen_smooth, plot_log10, polar_plot, pre_proc,
 #' sta_lta_calc, taper, td_plt_select, peak_fit_auto, peak_fit_manual,
 #' gaussian_gen_fit}
 #'
